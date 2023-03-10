@@ -19,9 +19,40 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument,IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument,IncludeLaunchDescription,OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+from launch.launch_context import LaunchContext
+
+def include_launch_description(context: LaunchContext):
+
+    # Launch Argument Configurations
+    namespace = LaunchConfiguration('namespace')
+    
+    # Configures the tf tree frames to include the namespace at the beginning, if the robot has a namespace
+    urdf_namespace = [str(context.launch_configurations['namespace'])+'/', ''][str(context.launch_configurations['namespace']) == '']
+    
+    remapping_tf = [
+        ('/tf', 'tf'),
+        ('/tf_static', 'tf_static')
+    ]
+    
+    # Nodes and other launch files
+    costmap_to_polygon = Node(
+    	package='costmap_converter',
+    	executable='/home/niklas/AuNa/install/costmap_converter/bin/standalone_converter',
+    	name='standalone_converter',
+    	namespace=namespace,
+    	remappings=remapping_tf
+    )
+
+    # Create launch description actions
+    launch_description_content = []
+    launch_description_content.append(costmap_to_polygon)
+
+    return launch_description_content
+
 
 def generate_launch_description():
 
@@ -67,9 +98,11 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(world_name_arg)
-
+    
     ld.add_action(world_cmd)
     ld.add_action(spawn_cmd)
+    
     ld.add_action(nav_cmd)
+    ld.add_action(OpaqueFunction(function=include_launch_description))
 
     return ld

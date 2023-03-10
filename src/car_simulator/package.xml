@@ -9,6 +9,7 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <buildtool_depend>costmap_converter</buildtool_depend>
   
   <depend>rclcpp</depend>
   <depend>rclpy</depend>
@@ -22,6 +23,7 @@
   <depend>kdl</depend>
   <depend>ros_its_msgs</depend>
   <depend>etsi_its_msgs</depend>
+  <depend>costmap_converter</depend>
   
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>

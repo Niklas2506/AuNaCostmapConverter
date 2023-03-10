@@ -28,6 +28,8 @@ find_package(gazebo_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_kdl REQUIRED)
 
+find_package(costmap_converter REQUIRED)
+
 
 add_executable(localization_pose src/transformations/localization_pose.cpp)
 ament_target_dependencies(localization_pose rclcpp std_msgs geometry_msgs nav_msgs tf2_ros tf2_kdl)
